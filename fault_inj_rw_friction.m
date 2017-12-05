@@ -17,33 +17,20 @@ t_c = 2;
 t_induced = zeros(1, length(omega0));
 for i = 1:length(omega0) 
     [alpha, omega, t_induced] = friction_alpha(f, f_hat, I, t_c, omega0(i), tspan);
-%     figure
-%     hold on
-%     plot(alpha.time_induced, t_induced, '*')
-%     plot(omega.t_induced, f_threshold(1, omega.induced));
-% %     tStr = ['\Delta\alpha vs time at \omega = ', sprintf('%.2f rad/s', omega0(i))];
-% %     title(tStr)
-%     xlabel('Time (s)')
-%     ylabel('\tau_f (N-m))')
-%     legend('\hat{tau}_f', '\tau_{threshold}')
-% %     t_adtl_max(i) = max(t_adtl);
-%     t_max_loc(i) = find(max(t_adtl));
     t_induced0(i) = t_induced(1);
 end
 
 %% calculate normal data deviation from nominal frition function
 residual = f(1, omega_nom) - t_f_nom;
 res_std = std(residual);
+E = ones(length(residual), 1).*res_std;
 figure
 hold on
 t_induced = interp1(omega0, t_induced0, omega_nom) + randn([length(omega_nom), 1])*res_std;
-plot(omega_nom, t_induced, '*--', 'LineWidth', 1.5)
+errorbar(omega_nom, t_induced, E, '*--', 'LineWidth', 1.5)
 plot(omega0, f_threshold(1, omega0), '--', 'LineWidth', 1.5);
-plot(omega0, f(1, omega0), 'LineWidth', 1.5)
-plot(omega_nom, t_f_nom, 'p--');
-% plot(omega_nom, t_induced, '*--');
-% plot(omega_nom, t_f_nom)
-% axis([-omega, omega0(end), 0, max(t_induced) + 0.2*max(t_induced)]);
+% plot(omega0, f(1, omega0), 'LineWidth', 1.5)
+errorbar(omega_nom, t_f_nom, E, 'p--');
 legend({'\tau_{f,measured}', '\tau_{f,threshold}', '\tau_{f,nominal}', 'tau_{f,act}'},'Location', 'east', 'FontSize', 16)
 xlabel('\omega (rad/s)', 'FontSize', 16)
 ylabel('\tau_f (N-m)', 'FontSize', 16)
@@ -72,67 +59,3 @@ for i = 1:step:(length(d_theta_coarse) - step)
 end
 errorbar(t_ma, ma_coarse, 2*std_coarse, 'x--')
 errorbar(t_ma, ma_fine, 2*std_fine, 'x--')
-% plot(omega0, alpha_diff_omega, '*')
-% 
-% t_c = 0:0.25:5;
-% omega0 = 0;
-% alpha_diff_tc = zeros(1, length(t_c));
-% 
-% for j = 1:length(t_c) 
-%     [alpha, omega, t_adtl] = friction_alpha(f, f_hat, I, t_c(j), omega0, tspan);
-%     figure
-%     hold on
-%     plot(alpha.t_act, t_adtl, '*')
-%     plot([0, alpha.t_act(end)], [4*p(2), 4*p(2)]);
-%     tStr = ['\tau_{adtl} vs time at \tau_c = ', sprintf('%.2f', t_c(j))];
-%     title(tStr)
-%     xlabel('Time (s)')
-%     ylabel('\tau_{adtl}')
-%     legend('\tau_{adtl}', '\tau_{threshold}')
-%     t_adtl_max(j) = max(t_adtl);
-% end
-% figure
-% hold on
-% plot(t_c, t_adtl_max, '*')
-% plot([0, t_c(end)], [4*p(2), 4*p(2)], '--', 'LineWidth', 1.5);
-% axis([0, t_c(end), 0, max(t_adtl_max) + 0.2*max(t_adtl_max)]);
-% legend('\tau_{adtl}', '\tau_{threshold}')
-% xlabel('\tau_c [N-m]')
-% ylabel('\tau_{adtl}')
-% title('Added friction torque while holding \omega_0 = 0')
-
-% figure
-% hold on
-% plot(t_c, alpha_diff_tc, '*')
-% title('\Delta \alpha vs \tau_c')
-% xlabel('\tau_c (N-m)')
-% ylabel('\Delta \alpha (rad/s^2)')
-
-% 
-% figure
-% hold on
-% plot(omega, f(t, omega));
-% plot(omega, f_hat(t, omega));
-% legend('\tau_f nominal', '\tau_f induced')
-% title('Induced vs nominal friction')
-% 
-% figure
-% hold on
-% plot(t, omega)
-% plot(t_hat, omega_hat)
-% legend('Omega w/ nominal friction', 'Omega w/ induced friction')
-% xlabel('Time (s)')
-% ylabel('Reaction wheel speed (rad/s)')
-% tStr = ['Reaction wheel speed vs time for \tau_c = ', sprintf('%.2f N-m', t_c)];
-% title(tStr)
-% 
-% figure
-% hold on
-% plot(alpha.t_act, alpha.act);
-% plot(alpha.t_induced, alpha.induced)
-% legend('\alpha w/ nominal friction', '\alpha w/ induced friction', ...
-%        '\alpha w/ nominal friction, eval with data', '\alpha w/ induced friction, eval w/ data')
-% xlabel('Time (s)')
-% ylabel('\alpha (rad/s^2)')
-% tStr = ['\alpha vs time for \tau_c = ', sprintf('%.2f N-m', t_c)];
-% title(tStr)
