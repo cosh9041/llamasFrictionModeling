@@ -20,5 +20,6 @@ theta_threshold_check();
 
 %% Run threshold check on induced friction vs nominal
 torque_threshold_check(f, f_hat, residual_threshold, res_std);
+
 %% Run threshold check on nominal vs nominal friction (Should not fault)
 torque_threshold_check(f, f, residual_threshold, res_std);
