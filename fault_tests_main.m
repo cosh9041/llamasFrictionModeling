@@ -14,7 +14,6 @@ print_torque_plot(f, f_hat, I, tspan, omega_nom, t_f_nom);
 residual = f(1, omega_nom) - t_f_nom;
 res_std = std(residual);
 E = ones(length(residual), 1).*res_std;
-
 %% Run threshld check on mock theta data, given 5 degree offset
 theta_threshold_check();
 

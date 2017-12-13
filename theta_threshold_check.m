@@ -8,7 +8,7 @@ d_theta_coarse = (rand(N, 1) - 0.5)*2 + 0.1*randn(N,1) + ...
     [0*ones(N/2, 1); 5*ones(N/2, 1)]; % 5 degree static offset, manifested in 
 d_theta_fine = (rand(N, 1) - 0.5)*1 + 0.1*randn(N,1); % d_theta reading
 t = linspace(0, N/50, N);
-fig = figure
+figure
 hold on
 step = 10;
 [fault_status, indicies] = check_data(d_theta_coarse, d_theta_fine, step, ...
@@ -24,11 +24,15 @@ dim_bad = [t(fault_start)/t(end), .11, ...
 dim_good = [0.13, 0.11, t(fault_start)/t(end) - .13,1-.180];
 annotation('rectangle',dim_bad,'FaceColor','r','FaceAlpha',.2, 'Units', 'pixels')
 annotation('rectangle',dim_good,'FaceColor','g','FaceAlpha',.2)
-% annotation('textbox',[0, ,'String',str,'FitBoxToText','on');
-
-plot(t, d_theta_coarse)
-plot(t, d_theta_fine)
-plot(t(indicies), fault_status)
+annotation('textbox', [0.14, 0.6, 0.3, 0.3], ...
+    'String', 'No fault detected', 'FitBoxToText', 'on', 'FontSize', 14);
+annotation('textbox', [0.6, 0.6, 0.3, 0.3], ...
+    'String', 'Fault detected', 'FitBoxToText', 'on', 'FontSize', 14);
+plot(t, d_theta_coarse, '*')
+plot(t, d_theta_fine, 'x')
+legend({'\theta course', '\theta fine'}, 'location', 'west', 'FontSize', 14);
+xlabel('Time (s)', 'FontSize', 14)
+ylabel('\theta (deg)', 'FontSize', 14) 
 end
 
 % This commented out code will plot the locations of moving average for
